@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "users".
@@ -43,7 +44,7 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             [['username', 'first_name', 'last_name'], 'string', 'max' => 50],
             [['email'], 'string', 'max' => 100],
             [['password', 'address'], 'string', 'max' => 255],
-            [['email'], 'unique'],
+            [['email', 'username'], 'unique'],
         ];
     }
 
@@ -63,25 +64,23 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'isAdmin' => 'isAdmin',
         ];
     }
-    
+
     public static function findIdentity($id)
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        return static::findOne($id);
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function findIdentityByAccessToken($token, $type = null)
-    {
-        foreach (self::$users as $user) {
-            if ($user['accessToken'] === $token) {
-                return new static($user);
-            }
-        }
-
-        return null;
+    public static function findIdentityByAccessToken(
+        $token,
+        $type =
+        null
+    ) {
+        return static::findOne(['access_token' => $token]);
     }
+
 
     /**
      * Finds user by username
@@ -89,16 +88,16 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      * @param string $username
      * @return static|null
      */
-    public static function findByUsername($username)
-    {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
-        }
+    // public static function findByUsername($username)
+    // {
+    //     foreach (self::$users as $user) {
+    //         if (strcasecmp($user['username'], $username) === 0) {
+    //             return new static($user);
+    //         }
+    //     }
 
-        return null;
-    }
+    //     return null;
+    // }
 
     /**
      * {@inheritdoc}
@@ -113,7 +112,7 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public function getAuthKey()
     {
-        return $this->authKey;
+        return;
     }
 
     /**
@@ -121,7 +120,7 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public function validateAuthKey($authKey)
     {
-        return $this->authKey === $authKey;
+        return;
     }
 
     /**
@@ -134,9 +133,10 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return $this->password === $password;
     }
-    
-    public static function findByEmail($email){
-        return self::find()->where(['email'=> $email])->one();
+
+    public static function findByUsername($username)
+    {
+        return self::find()->where(['username' => $username])->one();
     }
     /**
      * Gets query for [[Carts]].

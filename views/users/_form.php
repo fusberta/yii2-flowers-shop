@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 //use yii\widgets\ActiveForm;
 use yii\bootstrap5\ActiveForm;
-use yii\widgets\Pjax;
 
 
 /** @var yii\web\View $this */
@@ -12,15 +11,25 @@ use yii\widgets\Pjax;
 ?>
 
 <div class="users-form">
+    <?php 
+        $form = ActiveForm::begin();
+    ?>
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?= $form->field($model, 'first_name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'last_name')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'patrynomic')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'username', [
+        'enableAjaxValidation' =>
+            true
+    ])->textInput(['maxlength' => true]);?>
 
     <?= $form->field($model, 'email', [
         'enableAjaxValidation' =>
             true
-    ])->textInput(['maxlength' => true], ) ?>
+    ])->textInput(['maxlength' => true], ); ?>
 
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
 
@@ -32,6 +41,10 @@ use yii\widgets\Pjax;
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
     </div>
 
-    <?php ActiveForm::end(); ?>
+    <?php 
+        ActiveForm::end();
+     ?>
+
+     
 
 </div>

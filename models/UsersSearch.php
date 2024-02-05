@@ -22,6 +22,13 @@ class UsersSearch extends Users
         ];
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'username' => 'Имя пользователя',
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */

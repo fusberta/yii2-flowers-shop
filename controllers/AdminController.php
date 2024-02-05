@@ -13,10 +13,12 @@ class AdminController extends \yii\web\Controller
 
     public function beforeAction($action)
     {
-        if ((Yii::$app->user->isGuest) || (Yii::$app->user->identity->is_admin == 0)) {
+        if ((Yii::$app->user->isGuest) || (Yii::$app->user->identity->isAdmin == 0)) {
             $this->redirect(['site/login']);
             return false;
-        } else
-            return true;
+        }
+        return true;
     }
 }
+
+

@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Users;
 use app\models\UsersSearch;
 use app\models\RegForm;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -63,6 +64,13 @@ class UsersController extends Controller
         ]);
     }
 
+    public function beforeAction($action)
+    {
+        if ($action->id == 'checkout')
+            $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }
+
     /**
      * Creates a new Users model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -79,7 +87,7 @@ class UsersController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'user_id' => $model->user_id]);
+                return $this->redirect(['site/login']);
             }
         } else {
             $model->loadDefaultValues();
@@ -88,6 +96,23 @@ class UsersController extends Controller
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+
+    public function actionCheckout()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $rawBody = Yii::$app->request->rawBody;
+        $requestData = json_decode($rawBody, true);
+
+        $password = $requestData['password'];
+
+        $user = Users::findOne(Yii::$app->user->id);
+        if (!$user || !$user->validatePassword($password)) {
+            return ['success' => false, 'error' => 'Неверный пароль'];
+        }
+
+        return ['success' => true];
     }
 
     /**

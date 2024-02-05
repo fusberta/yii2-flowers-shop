@@ -17,6 +17,18 @@ class RegForm extends Users
                 ['username', 'email', 'password', 'confirm_password', 'agree'],
                 'required'
             ],
+            ['first_name','string','max' => 50],
+            [
+                ['first_name'], 
+                'match', 
+                'pattern' => '/^[А-Яа-яЁё\s\-]+$/u', 
+                'message' => 'Допустимы только кириллические символы, пробелы и тире.',
+            ],
+            [
+                ['last_name'], 
+                'match', 
+                'pattern' => '/^[А-Яа-яЁё\s\-]+$/u', 
+                'message' => 'Допустимы только кириллические символы, пробелы и тире.'],
             [
                 ['username'],
                 'match',
@@ -35,7 +47,7 @@ class RegForm extends Users
                 'compare',
                 'compareAttribute' => 'password'
             ],
-            [['email'], 'unique'],
+            [['email', 'username'], 'unique'],
             [
                 ['agree'],
                 'compare',
@@ -51,6 +63,8 @@ class RegForm extends Users
     public function attributeLabels()
     {
         return [
+            'first_name' => 'Имя',
+            'last_name' => 'Фамилия',
             'username' => 'Имя пользователя',
             'email' => 'Адрес электронной почты',
             'password' => 'Пароль',

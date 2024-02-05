@@ -23,7 +23,7 @@ $this->title = 'Авторизация';
             'errorOptions' => ['class' => 'col-lg-7 invalid-feedback'],
         ],
     ]); ?>
-    <?= $form->field($model, 'email')->textInput([
+    <?= $form->field($model, 'username')->textInput([
         'autofocus' =>
             true
     ]) ?>

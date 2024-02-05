@@ -18,6 +18,11 @@ main > .container {
     font-style: italic;
 }
 
+.navbar-brand > img {
+    height: 40px;
+    width: 40px;
+}
+
 /* add sorting icons to gridview sort links */
 a.asc:after, a.desc:after {
     content: '';
